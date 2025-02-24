@@ -1,0 +1,22 @@
+{
+  "name": "factory-distro-registry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "JUMO, COSMO-SAM",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "factory-distro-registry": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prisma": "^6.4.1"
+  }
+}

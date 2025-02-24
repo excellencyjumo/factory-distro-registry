@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+ 
+enum Role {
+    PRODUCTION_MANAGER
+    WAREHOUSE_MANAGER
+    SALES_REP
+  }
+  
+enum ProductType {
+    TABLE
+    CHAIR
+    DOOR
+  }
+  
+enum WarehouseName {
+    ILUPEJU
+    SANGO_TEDO
+    MOWE
+  }
+  
+enum OrderStatus {
+    PENDING
+    SUCCESSFUL
+    FAILED
+  }
+  
+enum DistributionStatus {
+    PENDING
+    SUCCESSFUL
+    FAILED
+  }
+  
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String
+    role      Role
+    warehouseId Int?
+    warehouse Warehouse? @relation(fields: [warehouseId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
+  
+model Production {
+    id        Int         @id @default(autoincrement())
+    product   ProductType
+    amount    Int
+    date      DateTime
+    distributions WarehouseDistribution[]
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+  }
+  
+
+model Warehouse {
+    id        Int         @id @default(autoincrement())
+    name      WarehouseName @unique
+    location  String
+    capacity  Int
+    distributions WarehouseDistribution[]
+    orders    Order[]
+    users     User[]   
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+  }
+  
+  model WarehouseDistribution {
+    id          Int         @id @default(autoincrement())
+    production  Production? @relation(fields: [productionId], references: [id])
+    productionId Int?
+    warehouse   Warehouse   @relation(fields: [warehouseId], references: [id])
+    warehouseId Int
+    product     ProductType
+    amount      Int
+    status      DistributionStatus
+    distributedAt DateTime
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+  }
+  
+  model Order {
+    id               Int         @id @default(autoincrement())
+    customerName     String
+    customerAddress  String
+    product          ProductType
+    amount           Int
+    warehouse        Warehouse   @relation(fields: [warehouseId], references: [id])
+    warehouseId      Int
+    status           OrderStatus
+    createdAt        DateTime    @default(now())
+    updatedAt        DateTime    @updatedAt
+  }
