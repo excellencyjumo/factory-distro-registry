@@ -23,18 +23,18 @@ exports.createProduction = catchAsync(async (req, res, next) => {
 });
 
 exports.distributeToWarehouse = catchAsync(async (req, res, next) => {
-  const { distributions } = req.body;
+  const { warehouse_name, distributions } = req.body;
   const distributionResults = [];
 
-  for (const dist of distributions) {
-    const { warehouse_name, product_name, amount } = dist;
+  const warehouse = await prisma.warehouse.findUnique({
+    where: { name: warehouse_name }
+  });
+  if (!warehouse) {
+    throw new AppError(`Warehouse ${warehouse_name} not found`, 404);
+  }
 
-    const warehouse = await prisma.warehouse.findUnique({
-      where: { name: warehouse_name }
-    });
-    if (!warehouse) {
-      throw new AppError(`Warehouse ${warehouse_name} not found`, 404);
-    }
+  for (const dist of distributions) {
+    const { product_name, amount } = dist;
 
     const totalProduced = await prisma.production.aggregate({
       _sum: { amount: true },
@@ -61,7 +61,7 @@ exports.distributeToWarehouse = catchAsync(async (req, res, next) => {
 
     const distribution = await prisma.warehouseDistribution.create({
       data: {
-        warehouseId: parseInt(warehouse.id),
+        warehouseId: warehouse.id,
         product: product_name,
         amount: parseInt(amount),
         status: 'PENDING',
@@ -114,14 +114,31 @@ exports.getProductionDashboard = catchAsync(async (_req, res, _next) => {
   const warehouses = await prisma.warehouse.findMany();
 
   const dashboardData = warehouses.map(warehouse => {
-    const distributions = warehouseDistribution
-      .filter(d => d.warehouseId === warehouse.id)
-      .map(d => ({
-        product: d.product,
-        status: d.status,
-        total_amount: d._sum.amount,
-        count: d._count.status
-      }));
+    const warehouseDistributions = warehouseDistribution
+      .filter(d => d.warehouseId === warehouse.id);
+    
+    const distributions = Object.values(ProductType).map(productName => {
+      const productDistributions = warehouseDistributions
+        .filter(d => d.product === productName);
+      
+      return {
+        product_name: productName,
+        status_summary: {
+          PENDING: {
+            total_amount: productDistributions
+              .find(d => d.status === 'PENDING')?._sum.amount || 0,
+            count: productDistributions
+              .find(d => d.status === 'PENDING')?._count.status || 0
+          },
+          SUCCESSFUL: {
+            total_amount: productDistributions
+              .find(d => d.status === 'SUCCESSFUL')?._sum.amount || 0,
+            count: productDistributions
+              .find(d => d.status === 'SUCCESSFUL')?._count.status || 0
+          }
+        }
+      };
+    });
 
     return {
       warehouse_id: warehouse.id,

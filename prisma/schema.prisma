@@ -49,14 +49,14 @@ model User {
     email     String   @unique
     password  String
     role      Role
-    warehouseId Int?
+    warehouseId String?
     warehouse Warehouse? @relation(fields: [warehouseId], references: [id])
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
   }
   
 model Production {
-    id        Int         @id @default(autoincrement())
+    id               String      @id @default(uuid())
     product   ProductType
     amount    Int
     date      DateTime
@@ -67,7 +67,7 @@ model Production {
   
 
 model Warehouse {
-    id        Int         @id @default(autoincrement())
+    id               String      @id @default(uuid())
     name      WarehouseName @unique
     location  String
     capacity  Int
@@ -79,11 +79,9 @@ model Warehouse {
   }
   
   model WarehouseDistribution {
-    id          Int         @id @default(autoincrement())
-    production  Production? @relation(fields: [productionId], references: [id])
-    productionId Int?
+    id               String      @id @default(uuid())
     warehouse   Warehouse   @relation(fields: [warehouseId], references: [id])
-    warehouseId Int
+    warehouseId String      
     product     ProductType
     amount      Int
     status      DistributionStatus
@@ -93,13 +91,13 @@ model Warehouse {
   }
   
   model Order {
-    id               Int         @id @default(autoincrement())
+    id               String      @id @default(uuid())
     customerName     String
     customerAddress  String
     product          ProductType
     amount           Int
     warehouse        Warehouse   @relation(fields: [warehouseId], references: [id])
-    warehouseId      Int
+    warehouseId      String
     status           OrderStatus
     createdAt        DateTime    @default(now())
     updatedAt        DateTime    @updatedAt
