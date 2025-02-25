@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "f0379299-8b08-4426-8043-4cc50f9e26b5",
+		"name": "WarehouseMGmt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29882624",
+		"_collection_link": "https://galactic-comet-747486.postman.co/workspace/Team-Workspace~12ff75e4-a10c-435d-8868-1588bdd484ed/collection/29882624-f0379299-8b08-4426-8043-4cc50f9e26b5?action=share&source=collection_link&creator=29882624"
+	},
+	"item": [
+		{
+			"name": "Warehouse Manager",
+			"item": []
+		},
+		{
+			"name": "Sales Rep",
+			"item": []
+		},
+		{
+			"name": "Orders",
+			"item": []
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "LogOut",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Production Manager",
+			"item": []
+		}
+	]
+}
