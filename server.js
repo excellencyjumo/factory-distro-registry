@@ -6,8 +6,15 @@ const productionRoutes = require('./routes/production.routes');
 const warehouseRoutes = require('./routes/warehouse.routes');
 const orderRoutes = require('./routes/order.routes');
 const authRoutes = require('./routes/auth.routes');
+const responseHandler = require('./utils/responseHandler');
 
 app.use(express.json());
+
+app.get('/', (_req, res) => {
+  responseHandler.success(res,200,{
+    message: 'Welcome to the Production Management API!'
+  })
+});
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/productions', productionRoutes);
