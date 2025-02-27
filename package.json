@@ -11,9 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "factory-distro-registry": "file:"
+    "factory-distro-registry": "file:",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
