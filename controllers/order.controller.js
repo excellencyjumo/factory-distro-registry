@@ -76,15 +76,16 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
       where: { id },
       data: { status }
     });
+// fulfilled orders does not exist originally in the schema definition.
 
-    if (status === 'SUCCESSFUL') {
-      await tx.warehouse.update({
-        where: { id: order.warehouseId },
-        data: {
-          fulfilledOrders: { increment: 1 }
-        }
-      });
-    }
+    // if (status === 'SUCCESSFUL') {
+    //   await tx.warehouse.update({
+    //     where: { id: order.warehouseId },
+    //     data: {
+    //       fulfilledOrders: { increment: 1 }
+    //     }
+    //   });
+    // }
 
     return updated;
   });

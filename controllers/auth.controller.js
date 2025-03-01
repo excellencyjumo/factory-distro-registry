@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const responseHandler = require('../utils/responseHandler');
@@ -25,7 +25,11 @@ exports.register = catchAsync(async (req, res, next) => {
     });
   
     const token = signToken(newUser.email);
-    res.headers.authorization = `Bearer ${token}`;
+    // if (!res) {
+    //   return next(new Error("Response object is missing"));
+    // }
+    // res.headers.authorization = `Bearer ${token}`;
+      res.setHeader("Authorization", `Bearer ${token}`);
     responseHandler.success(res, 201, { role: newUser.role, token });
 });
 
@@ -43,11 +47,12 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   const token = signToken(user.email);
-  res.headers.authorization = `Bearer ${token}`;
+  res.setHeader("Authorization", `Bearer ${token}`);
+
   responseHandler.success(res, 200, { role: user.role, token });
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
-  res.headers.authorization = '';
+  res.setHeader('Authorization', ''); 
   responseHandler.success(res, 200, { message: 'Logged out successfully' });
 });
