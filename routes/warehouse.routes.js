@@ -10,5 +10,6 @@ router.use(catchAsync(restrictTo('WAREHOUSE_MANAGER')));
 router.get('/dashboard', catchAsync(warehouseController.getWarehouseDashboard));
 router.patch('/distributions/:distributionId', catchAsync(warehouseController.confirmDistribution));
 router.get('/distributions/:distributionId', catchAsync(warehouseController.getDistribution));
+router.post('/dashboard/create', catchAsync(warehouseController.createWarehouse));
 
 module.exports = router;

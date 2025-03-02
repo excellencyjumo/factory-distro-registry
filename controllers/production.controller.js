@@ -24,6 +24,7 @@ exports.createProduction = catchAsync(async (req, res, next) => {
 
 exports.distributeToWarehouse = catchAsync(async (req, res, next) => {
   const { warehouse_name, distributions } = req.body;
+
   const distributionResults = [];
 
   const warehouse = await prisma.warehouse.findUnique({

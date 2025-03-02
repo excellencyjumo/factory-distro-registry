@@ -77,15 +77,6 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
       data: { status }
     });
 
-    if (status === 'SUCCESSFUL') {
-      await tx.warehouse.update({
-        where: { id: order.warehouseId },
-        data: {
-          fulfilledOrders: { increment: 1 }
-        }
-      });
-    }
-
     return updated;
   });
 
