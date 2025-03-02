@@ -25,11 +25,7 @@ exports.register = catchAsync(async (req, res, next) => {
     });
   
     const token = signToken(newUser.email);
-    // if (!res) {
-    //   return next(new Error("Response object is missing"));
-    // }
-    // res.headers.authorization = `Bearer ${token}`;
-      res.setHeader("Authorization", `Bearer ${token}`);
+    res.setHeader("Authorization", `Bearer ${token}`);
     responseHandler.success(res, 201, { role: newUser.role, token });
 });
 
