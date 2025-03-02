@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors'); 
 require('dotenv').config();
 
 const productionRoutes = require('./routes/production.routes');
@@ -9,6 +10,12 @@ const authRoutes = require('./routes/auth.routes');
 const responseHandler = require('./utils/responseHandler');
 
 app.use(express.json());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
 
 app.get('/', (_req, res) => {
   responseHandler.success(res,200,{
