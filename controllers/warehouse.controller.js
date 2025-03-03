@@ -135,3 +135,31 @@ exports.getWarehouseDashboard = catchAsync(async (req, res, next) => {
       distributions: formattedDistributions
     });
   });
+
+  exports.createWarehouse = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { name, location, capacity } = req.body;
+  
+    const warehouse = await prisma.warehouse.create({
+      data: {
+        name,
+        location,
+        capacity: parseInt(capacity),
+        users: {
+          connect: { id: userId }
+        }
+      },
+      include: {
+        users: true
+      }
+    });
+  
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        warehouseId: warehouse.id
+      }
+    });
+  
+    responseHandler.success(res, 201, warehouse);
+  });
