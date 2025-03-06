@@ -32,7 +32,7 @@ enum WarehouseLocation {
     MOWE
 }
   
-enum WarehouseName{
+enum WarehouseName {
     SwiftStock
     PrimeStorage
     NextGen
