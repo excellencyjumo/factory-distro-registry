@@ -26,12 +26,18 @@ enum ProductType {
     DOOR
   }
   
-enum WarehouseName {
+enum WarehouseLocation {
     ILUPEJU
     SANGO_TEDO
     MOWE
-  }
+}
   
+enum WarehouseName{
+    SwiftStock
+    PrimeStorage
+    NextGen
+}
+
 enum OrderStatus {
     PENDING
     SUCCESSFUL
@@ -68,7 +74,7 @@ model User {
   model Warehouse {
     id               String      @id @default(uuid())
     name      WarehouseName @unique
-    location  String
+    location  WarehouseLocation @unique
     capacity  Int
     distributions WarehouseDistribution[]
     orders    Order[]
