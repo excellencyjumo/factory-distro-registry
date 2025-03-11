@@ -49,7 +49,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       customerAddress,
       product,
       amount,
-      warehouseId,
+      warehouseId: warehouse.id,
       status: 'PENDING'
     },
     include: { warehouse: true }
