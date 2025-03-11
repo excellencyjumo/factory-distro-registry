@@ -4,18 +4,28 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const responseHandler = require('../utils/responseHandler');
 
+
 exports.createOrder = catchAsync(async (req, res, next) => {
-  const { customerName, customerAddress, product, amount, warehouseId } = req.body;
-  
+  const { customerName, customerAddress, product, amount, warehouseName } = req.body;
+
   const warehouse = await prisma.warehouse.findUnique({
-    where: { id: warehouseId },
-    include: {
+    where: { 
+      name: warehouseName 
+    },
+    select: {
+      id: true,
       distributions: {
-        where: { product, status: 'SUCCESSFUL' },
+        where: { 
+          product,
+          status: 'SUCCESSFUL'
+        },
         select: { amount: true }
       },
       orders: {
-        where: { product, status: 'SUCCESSFUL' },
+        where: { 
+          product,
+          status: 'SUCCESSFUL'
+        },
         select: { amount: true }
       }
     }
